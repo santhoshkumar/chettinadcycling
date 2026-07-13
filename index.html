@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<title>Chettinad Cycling Club | Cycling Club for Karaikudi & Around</title>
+<meta name="description" content="Chettinad Cycling Club — a cycling community for people in and around Karaikudi. Local rides, Weekdays Ride and weekend endurance rides through Chettinad's heritage towns.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://santhoshkumar.github.io/chettinadcycling/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+:root{
+  --clay:#7B2A22;
+  --clay-dark:#571C17;
+  --mustard:#D19A21;
+  --teal:#1E4842;
+  --cream:#F6EEE1;
+  --cream-2:#EFE3CE;
+  --ink:#241A14;
+  --ink-soft:#5A493E;
+  --line:rgba(36,26,20,0.16);
+  --radius:12px;
+  --shadow:0 14px 34px rgba(87,28,23,0.16);
+  --maxw:1080px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto;}*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Geist Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  font-size:15px;
+}
+h1,h2,h3{
+  font-family:'Geist Mono',monospace;
+  color:var(--clay-dark);
+  margin:0;
+  line-height:1.15;
+  letter-spacing:-0.015em;
+  font-weight:700;
+}
+a{color:inherit;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.eyebrow{
+  font-weight:600;
+  font-size:.72rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--teal);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.eyebrow::before{
+  content:"";
+  width:7px;height:7px;border-radius:50%;
+  background:var(--mustard);
+  display:inline-block;
+}
+
+header{position:sticky;top:0;z-index:50;background:rgba(246,238,225,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:var(--maxw);margin:0 auto;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.98rem;color:var(--clay-dark);text-decoration:none;letter-spacing:-0.02em;}
+.brand svg{width:28px;height:28px;}
+.navlinks{display:flex;gap:28px;align-items:center;}
+.navlinks a{text-decoration:none;font-weight:500;font-size:.82rem;color:var(--ink);letter-spacing:.02em;position:relative;padding-bottom:2px;}
+.navlinks a:not(.btn)::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1.5px;background:var(--clay);transition:width .2s ease;}
+.navlinks a:not(.btn):hover::after{width:100%;}
+a:focus-visible,button:focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:4px;}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--clay);color:#fff !important;
+  padding:11px 20px;border-radius:8px;text-decoration:none;
+  font-weight:600;font-size:.8rem;letter-spacing:.02em;
+  box-shadow:var(--shadow);
+  transition:transform .18s ease,background .18s ease,box-shadow .18s ease;
+  border:none;cursor:pointer;
+}
+.btn:hover{background:var(--clay-dark);transform:translateY(-2px);}
+.btn.gold{background:var(--mustard);color:var(--clay-dark) !important;}
+.btn.gold:hover{background:#B87F16;}
+
+.hero{
+  padding:96px 24px 72px;text-align:center;
+  background:
+    radial-gradient(circle at 82% 8%,rgba(209,154,33,.28),transparent 55%),
+    radial-gradient(circle at 8% 92%,rgba(30,72,66,.18),transparent 45%),
+    var(--cream);
+  position:relative;
+}
+.hero .eyebrow{display:inline-flex;margin-bottom:20px;}
+.hero h1{font-size:clamp(2rem,5.4vw,3rem);max-width:17ch;margin:0 auto;}
+.hero p.lead{margin:20px auto 0;max-width:48ch;color:var(--ink-soft);font-size:1rem;}
+.hero-ctas{display:flex;gap:14px;justify-content:center;margin-top:34px;flex-wrap:wrap;}
+.hero-tape{
+  margin-top:52px;display:flex;justify-content:center;gap:0;flex-wrap:wrap;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.hero-tape div{
+  padding:16px 26px;text-align:center;border-right:1px solid var(--line);
+}
+.hero-tape div:last-child{border-right:none;}
+.hero-tape b{display:block;font-size:1.3rem;color:var(--clay-dark);}
+.hero-tape span{font-size:.7rem;color:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase;}
+
+section{padding:72px 0;}
+.section-head{max-width:620px;margin:0 auto 44px;text-align:center;}
+.section-head h2{font-size:clamp(1.5rem,3.2vw,2.1rem);margin-top:12px;letter-spacing:-.02em;}
+.section-head p{color:var(--ink-soft);margin-top:12px;font-size:.92rem;}
+
+.about-band{background:var(--cream-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.about-flex{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:center;}
+.about-flex p{color:var(--ink-soft);margin:0 0 14px;font-size:.92rem;}
+.places{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px;}
+.places span{background:#fff;border:1px solid var(--line);padding:7px 13px;border-radius:7px;font-size:.76rem;color:var(--ink);letter-spacing:.01em;}
+.about-card{background:#fff;border-radius:var(--radius);border:1px solid var(--line);padding:26px;box-shadow:var(--shadow);}
+.about-card h3{font-size:.95rem;margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em;}
+.about-card ul{margin:0;padding:0;list-style:none;display:grid;gap:12px;}
+.about-card li{display:flex;gap:10px;font-size:.84rem;color:var(--ink-soft);align-items:flex-start;}
+.about-card li::before{content:"→";color:var(--mustard);font-weight:700;flex-shrink:0;}
+
+.ride-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.ride-card{background:#fff;border-radius:var(--radius);padding:26px;border:1px solid var(--line);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
+.ride-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);border-color:var(--clay);}
+.ride-card .tagrow{display:flex;justify-content:space-between;align-items:center;}
+.ride-card .tag{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mustard);background:rgba(209,154,33,.14);padding:5px 10px;border-radius:6px;}
+.ride-card .km{font-size:.78rem;font-weight:700;color:var(--clay);}
+.ride-card h3{font-size:1.05rem;margin-top:16px;letter-spacing:-.01em;}
+.ride-card p{color:var(--ink-soft);font-size:.82rem;margin-top:9px;}
+.ride-meta{margin-top:18px;padding-top:14px;border-top:1px dashed var(--line);font-size:.76rem;color:var(--ink-soft);display:grid;gap:7px;}
+
+.tag-band{background:var(--clay);color:#F4EFE3;text-align:center;border-radius:20px;margin:0 24px;padding:48px 28px;position:relative;overflow:hidden;}
+.tag-band .eyebrow{color:var(--mustard);}
+.tag-band .eyebrow::before{background:#F4EFE3;}
+.tag-band h2{color:#fff;font-size:clamp(1.4rem,3.4vw,1.9rem);margin-top:12px;letter-spacing:-.02em;}
+.tag-band p{color:#E7D8C4;max-width:46ch;margin:12px auto 26px;font-size:.88rem;}
+
+.map-shell{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);}
+#karaikudi-map{width:100%;height:440px;}
+.map-legend{display:flex;justify-content:center;gap:22px;margin-top:16px;flex-wrap:wrap;font-size:.76rem;color:var(--ink-soft);}
+.map-legend span{display:inline-flex;align-items:center;gap:8px;}
+.swatch{width:12px;height:12px;border-radius:3px;display:inline-block;}
+.leaflet-popup-content{font-family:'Geist Mono',monospace;font-size:.78rem;}
+.leaflet-container{font-family:'Geist Mono',monospace;background:#EFE3CE;}
+
+.strava-card{
+  margin-top:22px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px 24px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+  box-shadow:var(--shadow);
+}
+.strava-icon{
+  width:42px;height:42px;flex-shrink:0;
+  background:var(--clay-dark);
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+}
+.strava-copy{flex:1;min-width:220px;}
+.strava-copy .eyebrow{margin-bottom:6px;}
+.strava-copy p{margin:0;font-size:.88rem;color:var(--ink-soft);}
+.strava-copy p b{color:var(--clay-dark);}
+
+footer{padding:44px 0 28px;color:var(--ink-soft);font-size:.78rem;text-align:center;border-top:1px solid var(--line);margin-top:16px;}
+footer a{color:var(--clay);text-decoration:none;}
+
+@media (max-width:860px){
+  .about-flex{grid-template-columns:1fr;}
+  .ride-cards{grid-template-columns:1fr;}
+}
+@media (max-width:640px){
+  .navlinks{display:none;}
+  .tag-band{margin:0 16px;padding:38px 20px;}
+  #karaikudi-map{height:340px;}
+  .strava-card{flex-direction:column;text-align:center;}
+  .hero{padding:72px 20px 56px;}
+  .hero-tape div{padding:14px 18px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <circle cx="12" cy="27" r="7" stroke="#7B2A22" stroke-width="2.6"/>
+        <circle cx="28" cy="27" r="7" stroke="#7B2A22" stroke-width="2.6"/>
+        <path d="M12 27L19 12L28 27M19 12H24M12 27H19" stroke="#D19A21" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Chettinad Cycling Club
+    </a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <span>Karaikudi · Sivaganga District · Tamil Nadu</span>
+    <h1>Cycling Club for People In and Around Karaikudi</h1>
+    <p class="lead">Local rides, weekdays endurance rides and Sunday Long ride through the heritage towns of Chettinad. All paces welcome.</p>
+    <div class="hero-ctas">
+      <a class="btn" href="https://www.instagram.com/chettinadcycling" target="_blank" rel="nofollow noopener">#chettinadcycling</a>
+      <a class="btn gold" href="#rides">See our rides</a>
+    </div>
+    <div class="hero-tape">
+      <div><b>15–30</b><span>Local KM</span></div>
+      <div><b>50</b><span>Weekdays KM</span></div>
+      <div><b>100</b><span>Sunday KM</span></div>
+    </div>
+  </section>
+
+  <section id="about" class="about-band">
+    <div class="wrap">
+      <div class="about-flex">
+        <div>
+          <span class="eyebrow">About the town</span>
+          <h2 style="margin-top:12px;">Karaikudi, the heart of Chettinad</h2>
+          <p>Karaikudi is the largest town in the Chettinad region of Tamil Nadu, known for its grand mansions, Temples, hand-painted Athangudi tiles and quiet, flat backroads — ideal riding terrain for early morning distance.</p>
+          <p>The surrounding villages are linked by low-traffic roads that pass temples, tile workshops and century-old courtyards, which is what shapes almost every route we ride.</p>
+          <div class="places">
+            <span>College Road</span><span>Kanadukathan</span><span>Athangudi</span><span>Kottaiyur</span>
+            <span>Devakottai</span><span>Pallathur</span><span>Kundrakudi</span><span>Pillaiyarpatti</span>
+            <span>Thirumayam</span>
+          </div>
+        </div>
+        <div class="about-card">
+          <h3>Why ride here</h3>
+          <ul>
+            <li>Flat, low-traffic roads through mansion villages</li>
+            <li>Relax riding window before 8 AM, most of the year</li>
+            <li>Heritage stops — palaces, temple towns</li>
+            <li>Easy loop-backs to Karaikudi for support and water</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rides">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Ride calendar</span>
+        <h2>Three ways to ride with us</h2>
+        <p>Fixed Ride timings, routes built around Karaikudi and its neighbouring heritage towns.</p>
+      </div>
+      <div class="ride-cards">
+        <div class="ride-card">
+          <div class="tagrow">
+            <span class="tag">Daily</span>
+            <span class="km">15–30 KM</span>
+          </div>
+          <h3>Local Rides</h3>
+          <p>Easy evening or early-morning rides within Karaikudi town and College Road — good for beginners and daily riders.</p>
+          <div class="ride-meta">
+            <div>Route — College Road and Karaikudi town loop</div>
+            <div>Pace — easy, social</div>
+          </div>
+        </div>
+        <div class="ride-card">
+          <div class="tagrow">
+            <span class="tag">Weekdays</span>
+            <span class="km">50 KM</span>
+          </div>
+          <h3>Weekdays Endurance Rides</h3>
+          <p>A 50 km ride covering around Karaikudi.</p>
+          <div class="ride-meta">
+            <div>Pace — moderate or Fast</div>
+          </div>
+        </div>
+        <div class="ride-card">
+          <div class="tagrow">
+            <span class="tag">Sundays</span>
+            <span class="km">100 KM</span>
+          </div>
+          <h3>LONG RIDE</h3>
+          <p>A 100 km brevet-style ride out through testing distance and pace control.</p>
+          <div class="ride-meta">
+            <div>Pace — endurance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="tag-band">
+      <span class="eyebrow">Follow us</span>
+      <h2>Post your ride with #chettinadcycling</h2>
+      <p>Every ride photo, route, and weekend meet-up gets shared under the hashtag and tag our page — follow it to catch the next one.</p>
+      <a class="btn gold" href="https://www.instagram.com/chettinadcycling" target="_blank" rel="nofollow noopener">View #chettinadcycling on Instagram</a>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Where we ride</span>
+        <h2>Karaikudi, on the map</h2>
+      </div>
+      <div class="map-shell">
+        <div id="karaikudi-map" role="img" aria-label="Map highlighting the Karaikudi area, Tamil Nadu"></div>
+      </div>
+      <div class="map-legend">
+        <span><span class="swatch" style="background:var(--clay);opacity:.5;"></span>Karaikudi area</span>
+        <span><span class="swatch" style="background:var(--mustard);"></span>Ride waypoint</span>
+      </div>
+
+      <div class="strava-card">
+        <div class="strava-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13.5 2L6 15h4.5L9 22l8.5-13H13L13.5 2z" fill="#D19A21"/></svg>
+        </div>
+        <div class="strava-copy">
+          <span class="eyebrow">Strava Club</span>
+        </div>
+        <a class="btn gold" href="https://www.strava.com/clubs/988728" target="_blank" rel="nofollow noopener">Join Chettinad Randonneurs</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    © <span id="year"></span> Chettinad Cycling Club — Karaikudi, Tamil Nadu · <a href="https://www.instagram.com/explore/tags/chettinadcycling/" target="_blank" rel="noopener">#chettinadcycling</a>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+(function(){
+  if (typeof L === 'undefined') return;
+
+  var karaikudi = [10.0733, 78.7833];
+  var map = L.map('karaikudi-map', { scrollWheelZoom: false, minZoom: 11 }).setView(karaikudi, 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  var karaikudiBoundary = [
+    [10.1120, 78.7420],
+    [10.1030, 78.7920],
+    [10.0850, 78.8180],
+    [10.0620, 78.8230],
+    [10.0380, 78.8080],
+    [10.0330, 78.7720],
+    [10.0480, 78.7380],
+    [10.0780, 78.7220],
+    [10.1000, 78.7280]
+  ];
+
+  var highlight = L.polygon(karaikudiBoundary, {
+    color: '#7B2A22',
+    weight: 2,
+    fillColor: '#D19A21',
+    fillOpacity: 0.28
+  }).addTo(map);
+
+  map.fitBounds(highlight.getBounds(), { padding: [18, 18] });
+  map.setMaxBounds(highlight.getBounds().pad(0.6));
+
+  var waypoints = [
+    { name: "Karaikudi — start / finish", coords: karaikudi },
+    { name: "Kanadukathan", coords: [10.0764, 78.7248] },
+    { name: "Athangudi", coords: [10.0361, 78.7167] },
+    { name: "Kottaiyur", coords: [10.0189, 78.7561] },
+    { name: "Devakottai", coords: [9.9522, 78.8256] },
+    { name: "Pallathur", coords: [10.0122, 78.7961] },
+    { name: "Kundrakudi", coords: [10.0742, 78.8433] }
+  ];
+
+  waypoints.forEach(function(p){
+    L.circleMarker(p.coords, {
+      radius: 6,
+      color: '#571C17',
+      weight: 1.5,
+      fillColor: '#D19A21',
+      fillOpacity: 1
+    }).addTo(map).bindPopup('<b>' + p.name + '</b>');
+  });
+
+  map.on('focus', function(){ map.scrollWheelZoom.enable(); });
+  map.on('blur', function(){ map.scrollWheelZoom.disable(); });
+})();
+</script>
+
+</body>
+</html>
