@@ -216,8 +216,8 @@ footer a{color:var(--clay);text-decoration:none;}
 
   <section class="hero">
     <span>Karaikudi · Sivaganga District · Tamil Nadu</span>
-    <h1>Chettinad Randonneurs <br> (@chettinadcycling) <br> Cycling Club for People In and Around Karaikudi</h1>
-    <p class="lead">Local rides, weekdays endurance rides and Sunday Long ride through the heritage towns of Chettinad. All paces welcome.</p>
+    <h1>Cycling Club for People In and Around Karaikudi</h1>
+    <p class="lead"><br> Chettinad Randonneurs (@chettinadcycling) <br> Local rides, weekdays endurance rides and Sunday Long ride through the heritage towns of Chettinad. All paces welcome.</p>
     <div class="hero-ctas">
       <a class="btn" href="https://www.instagram.com/chettinadcycling" target="_blank" rel="nofollow noopener">#chettinadcycling</a>
       <a class="btn gold" href="#rides">See our rides</a>
@@ -381,27 +381,6 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
   map.fitBounds(highlight.getBounds(), { padding: [18, 18] });
   map.setMaxBounds(highlight.getBounds().pad(0.6));
-
-  var waypoints = [
-    { name: "Karaikudi — start / finish", coords: karaikudi },
-    { name: "Kanadukathan", coords: [10.0764, 78.7248] },
-    { name: "Athangudi", coords: [10.0361, 78.7167] },
-    { name: "Kottaiyur", coords: [10.0189, 78.7561] },
-    { name: "Devakottai", coords: [9.9522, 78.8256] },
-    { name: "Pallathur", coords: [10.0122, 78.7961] },
-    { name: "Kundrakudi", coords: [10.0742, 78.8433] }
-  ];
-
-  waypoints.forEach(function(p){
-    L.circleMarker(p.coords, {
-      radius: 6,
-      color: '#571C17',
-      weight: 1.5,
-      fillColor: '#D19A21',
-      fillOpacity: 1
-    }).addTo(map).bindPopup('<b>' + p.name + '</b>');
-  });
-
   map.on('focus', function(){ map.scrollWheelZoom.enable(); });
   map.on('blur', function(){ map.scrollWheelZoom.disable(); });
 })();
